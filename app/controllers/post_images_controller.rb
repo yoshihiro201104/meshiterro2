@@ -4,6 +4,10 @@ class PostImagesController < ApplicationController
     @post_image = PostImage.new
   end
 
+  def index
+    @post_images = PostImage.all
+  end
+
   def create
     @post_image = PostImage.new(post_image_params)
     @post_image.user_id = current_user.id
