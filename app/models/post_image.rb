@@ -2,13 +2,16 @@ class PostImage < ApplicationRecord
   has_one_attached :image
   belongs_to :user
 
+  has_many :post_comments, dependent: :destroy
 
-  def get_image
-    unless image.attached?
+  def get_image(width, height)
+    if image.attached?
+      image.variant(resize: "#{width}x#{height}")
+    else
       file_path = Rails.root.join('app/assets/images/no_image.jpg')
       image.attach(io: File.open(file_path), filename: 'default-image', content_type: 'image/jpeg')
+      image.variant(resize: "#{width}x#{height}")
     end
-    image
   end
 
 end
