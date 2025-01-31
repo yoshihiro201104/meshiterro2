@@ -3,6 +3,7 @@ class PostImage < ApplicationRecord
   belongs_to :user
 
   has_many :post_comments, dependent: :destroy
+  has_many :favorites, dependent: :destroy
 
   def get_image(width, height)
     if image.attached?
@@ -12,6 +13,10 @@ class PostImage < ApplicationRecord
       image.attach(io: File.open(file_path), filename: 'default-image', content_type: 'image/jpeg')
       image.variant(resize: "#{width}x#{height}")
     end
+  end
+
+  def favorited_by?(user)
+    favorites.exists?(user_id: user.id)
   end
 
 end
